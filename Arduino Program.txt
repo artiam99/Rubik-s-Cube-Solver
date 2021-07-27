@@ -1,0 +1,345 @@
+#include <Stepper.h>
+const float stepper_rev=32;
+const float Gear_ratio=64;
+const float step_rev=stepper_rev*Gear_ratio;
+float stepsrequired;
+char a[100]="R";
+Stepper stepperw(stepper_rev,4,5,6,7);
+Stepper steppero(stepper_rev,22,24,26,28);
+Stepper stepperg(stepper_rev,45,43,41,39);
+Stepper stepperr(stepper_rev,17,16,15,14);
+Stepper stepperb(stepper_rev,21,20,19,18);
+Stepper steppery(stepper_rev,31,33,35,37);
+const byte numChars = 150;
+char receivedChars[numChars];   // an array to store the received data
+
+boolean newData = false;
+
+void setup() {
+    Serial.begin(9600);
+    Serial.println("<Arduino is ready>");
+}
+
+void loop() {
+    recvWithEndMarker();
+    showNewData();
+}
+
+void recvWithEndMarker() {
+    static byte ndx = 0;
+    char endMarker = '\n';
+    char rc;
+    
+    while (Serial.available() > 0 && newData == false) {
+        rc = Serial.read();
+
+        if (rc != endMarker) {
+            receivedChars[ndx] = rc;
+            ndx++;
+            if (ndx >= numChars) {
+                ndx = numChars - 1;
+            }
+        }
+        else {
+            receivedChars[ndx] = '\0'; // terminate the string
+            ndx = 0;
+            newData = true;
+        }
+    }
+}
+
+void showNewData() {
+  byte i=0;
+    if (newData == true) {
+        Serial.print("This just in ... ");
+        Serial.println(receivedChars);
+        newData = false;
+        for(i=0;receivedChars[i]!='\0';i++)
+        {
+          if((receivedChars[i]=='R'&&receivedChars[i+1]=='R'&&receivedChars[i+2]=='L'&&receivedChars[i+3]=='L')||(receivedChars[i]=='L'&&receivedChars[i+1]=='L'&&receivedChars[i+2]=='R'&&receivedChars[i+3]=='R')||(receivedChars[i]=='R'&&receivedChars[i+1]=='R'&&receivedChars[i+2]=='l'&&receivedChars[i+3]=='l')||(receivedChars[i]=='L'&&receivedChars[i+1]=='L'&&receivedChars[i+2]=='r'&&receivedChars[i+3]=='r')||(receivedChars[i]=='r'&&receivedChars[i+1]=='r'&&receivedChars[i+2]=='L'&&receivedChars[i+3]=='L')||(receivedChars[i]=='l'&&receivedChars[i+1]=='l'&&receivedChars[i+2]=='R'&&receivedChars[i+3]=='R')||(receivedChars[i]=='l'&&receivedChars[i+1]=='l'&&receivedChars[i+2]=='r'&&receivedChars[i+3]=='r')||(receivedChars[i]=='r'&&receivedChars[i+1]=='r'&&receivedChars[i+2]=='l'&&receivedChars[i+3]=='l'))
+          {
+            stepsrequired=step_rev/20.285;
+            stepperg.setSpeed(1400);
+            stepperg.step(stepsrequired);
+            stepperb.setSpeed(1400);
+            stepperb.step(stepsrequired);
+            i+=3;
+            delay(200);
+          }
+          else if((receivedChars[i]=='U'&&receivedChars[i+1]=='U'&&receivedChars[i+2]=='D'&&receivedChars[i+3]=='D')||(receivedChars[i]=='D'&&receivedChars[i+1]=='D'&&receivedChars[i+2]=='U'&&receivedChars[i+3]=='U')||(receivedChars[i]=='U'&&receivedChars[i+1]=='U'&&receivedChars[i+2]=='d'&&receivedChars[i+3]=='d')||(receivedChars[i]=='D'&&receivedChars[i+1]=='D'&&receivedChars[i+2]=='u'&&receivedChars[i+3]=='u')||(receivedChars[i]=='u'&&receivedChars[i+1]=='u'&&receivedChars[i+2]=='D'&&receivedChars[i+3]=='D')||(receivedChars[i]=='d'&&receivedChars[i+1]=='d'&&receivedChars[i+2]=='U'&&receivedChars[i+3]=='U')||(receivedChars[i]=='d'&&receivedChars[i+1]=='d'&&receivedChars[i+2]=='u'&&receivedChars[i+3]=='u')||(receivedChars[i]=='u'&&receivedChars[i+1]=='u'&&receivedChars[i+2]=='d'&&receivedChars[i+3]=='d'))
+          {
+            stepsrequired=step_rev/20.285;
+            stepperw.setSpeed(1400);
+            stepperw.step(stepsrequired);
+            steppery.setSpeed(1400);
+            steppery.step(stepsrequired);
+            i+=3;
+            delay(200);
+          }
+          else if((receivedChars[i]=='F'&&receivedChars[i+1]=='F'&&receivedChars[i+2]=='B'&&receivedChars[i+3]=='B')||(receivedChars[i]=='B'&&receivedChars[i+1]=='B'&&receivedChars[i+2]=='F'&&receivedChars[i+3]=='F')||(receivedChars[i]=='F'&&receivedChars[i+1]=='F'&&receivedChars[i+2]=='b'&&receivedChars[i+3]=='b')||(receivedChars[i]=='B'&&receivedChars[i+1]=='B'&&receivedChars[i+2]=='f'&&receivedChars[i+3]=='f')||(receivedChars[i]=='f'&&receivedChars[i+1]=='f'&&receivedChars[i+2]=='B'&&receivedChars[i+3]=='B')||(receivedChars[i]=='b'&&receivedChars[i+1]=='b'&&receivedChars[i+2]=='F'&&receivedChars[i+3]=='F')||(receivedChars[i]=='b'&&receivedChars[i+1]=='b'&&receivedChars[i+2]=='f'&&receivedChars[i+3]=='f')||(receivedChars[i]=='f'&&receivedChars[i+1]=='f'&&receivedChars[i+2]=='b'&&receivedChars[i+3]=='b'))
+          {
+            stepsrequired=step_rev/20.285;
+            steppero.setSpeed(1400);
+            steppero.step(stepsrequired);
+            stepperr.setSpeed(1400);
+            stepperr.step(stepsrequired);
+            i+=3;
+            delay(200);
+          }
+          else if((receivedChars[i]=='R'&&receivedChars[i+1]=='L')||(receivedChars[i]=='L'&&receivedChars[i+1]=='R'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperg.setSpeed(1400);
+            stepperg.step(stepsrequired);
+            stepperb.setSpeed(1400);
+            stepperb.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='R'&&receivedChars[i+1]=='l')||(receivedChars[i]=='l'&&receivedChars[i+1]=='R'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperg.setSpeed(1400);
+            stepperg.step(stepsrequired);
+            stepperb.setSpeed(1400);
+            stepperb.step(-stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='r'&&receivedChars[i+1]=='L')||(receivedChars[i]=='L'&&receivedChars[i+1]=='r'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperg.setSpeed(1400);
+            stepperg.step(-stepsrequired);
+            stepperb.setSpeed(1400);
+            stepperb.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='r'&&receivedChars[i+1]=='l')||(receivedChars[i]=='l'&&receivedChars[i+1]=='r'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperg.setSpeed(1400);
+            stepperg.step(-stepsrequired);
+            stepperb.setSpeed(1400);
+            stepperb.step(-stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='U'&&receivedChars[i+1]=='D')||(receivedChars[i]=='D'&&receivedChars[i+1]=='U'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperw.setSpeed(1400);
+            stepperw.step(stepsrequired);
+            steppery.setSpeed(1400);
+            steppery.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='U'&&receivedChars[i+1]=='d')||(receivedChars[i]=='d'&&receivedChars[i+1]=='U'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperw.setSpeed(1400);
+            stepperw.step(stepsrequired);
+            steppery.setSpeed(1400);
+            steppery.step(-stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='u'&&receivedChars[i+1]=='D')||(receivedChars[i]=='D'&&receivedChars[i+1]=='u'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperw.setSpeed(1400);
+            stepperw.step(-stepsrequired);
+            steppery.setSpeed(1400);
+            steppery.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='u'&&receivedChars[i+1]=='d')||(receivedChars[i]=='d'&&receivedChars[i+1]=='u'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperw.setSpeed(1400);
+            stepperw.step(-stepsrequired);
+            steppery.setSpeed(1400);
+            steppery.step(-stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='F'&&receivedChars[i+1]=='B')||(receivedChars[i]=='B'&&receivedChars[i+1]=='F'))
+          {
+            stepsrequired=step_rev/40.565;
+            steppero.setSpeed(1400);
+            steppero.step(stepsrequired);
+            stepperr.setSpeed(1400);
+            stepperr.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='F'&&receivedChars[i+1]=='b')||(receivedChars[i]=='b'&&receivedChars[i+1]=='F'))
+          {
+            stepsrequired=step_rev/40.565;
+            steppero.setSpeed(1400);
+            steppero.step(stepsrequired);
+            stepperr.setSpeed(1400);
+            stepperr.step(-stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='f'&&receivedChars[i+1]=='B')||(receivedChars[i]=='B'&&receivedChars[i+1]=='f'))
+          {
+            stepsrequired=step_rev/40.565;
+            steppero.setSpeed(1400);
+            steppero.step(-stepsrequired);
+            stepperr.setSpeed(1400);
+            stepperr.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if((receivedChars[i]=='f'&&receivedChars[i+1]=='b')||(receivedChars[i]=='b'&&receivedChars[i+1]=='f'))
+          {
+            stepsrequired=step_rev/40.565;
+            steppero.setSpeed(1400);
+            steppero.step(-stepsrequired);
+            stepperr.setSpeed(1400);
+            stepperr.step(-stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if(((receivedChars[i]=='R'&&receivedChars[i+1]=='R')||(receivedChars[i]=='r'&&receivedChars[i+1]=='r'))&&(receivedChars[i+2]!='L'||receivedChars[i+2]!='l'))
+          {
+            stepsrequired=step_rev/20.285;
+            stepperg.setSpeed(1400);
+            stepperg.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if(((receivedChars[i]=='L'&&receivedChars[i+1]=='L')||(receivedChars[i]=='l'&&receivedChars[i+1]=='l'))&&(receivedChars[i+2]!='R'||receivedChars[i+2]!='r'))
+          {
+            stepsrequired=step_rev/20.285;
+            stepperb.setSpeed(1400);
+            stepperb.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if(((receivedChars[i]=='U'&&receivedChars[i+1]=='U')||(receivedChars[i]=='u'&&receivedChars[i+1]=='u'))&&(receivedChars[i+2]!='D'||receivedChars[i+2]!='d'))
+          {
+            stepsrequired=step_rev/20.285;
+            stepperw.setSpeed(1400);
+            stepperw.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if(((receivedChars[i]=='D'&&receivedChars[i+1]=='D')||(receivedChars[i]=='d'&&receivedChars[i+1]=='d'))&&(receivedChars[i+2]!='u'||receivedChars[i+2]!='u'))
+          {
+            stepsrequired=step_rev/20.285;
+            steppery.setSpeed(1400);
+            steppery.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if(((receivedChars[i]=='F'&&receivedChars[i+1]=='F')||(receivedChars[i]=='f'&&receivedChars[i+1]=='f'))&&(receivedChars[i+2]!='B'||receivedChars[i+2]!='b'))
+          {
+            stepsrequired=step_rev/20.285;
+            steppero.setSpeed(1400);
+            steppero.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if(((receivedChars[i]=='B'&&receivedChars[i+1]=='B')||(receivedChars[i]=='b'&&receivedChars[i+1]=='b'))&&(receivedChars[i+2]!='F'||receivedChars[i+2]!='f'))
+          {
+            stepsrequired=step_rev/20.285;
+            stepperr.setSpeed(1400);
+            stepperr.step(stepsrequired);
+            i++;
+            delay(200);
+          }
+          else if(receivedChars[i]=='R'&&(receivedChars[i+2]!='r'||receivedChars[i+2]!='L'||receivedChars[i+2]!='l'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperg.setSpeed(1400);
+            stepperg.step(stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='r'&&(receivedChars[i+2]!='R'||receivedChars[i+2]!='L'||receivedChars[i+2]!='l'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperg.setSpeed(1400);
+            stepperg.step(-stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='L'&&(receivedChars[i+2]!='l'||receivedChars[i+2]!='R'||receivedChars[i+2]!='r'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperb.setSpeed(1400);
+            stepperb.step(stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='l'&&(receivedChars[i+2]!='L'||receivedChars[i+2]!='R'||receivedChars[i+2]!='r'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperb.setSpeed(1400);
+            stepperb.step(-stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='U'&&(receivedChars[i+2]!='u'||receivedChars[i+2]!='D'||receivedChars[i+2]!='d'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperw.setSpeed(1400);
+            stepperw.step(stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='u'&&(receivedChars[i+2]!='U'||receivedChars[i+2]!='D'||receivedChars[i+2]!='d'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperw.setSpeed(1400);
+            stepperw.step(-stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='D'&&(receivedChars[i+2]!='d'||receivedChars[i+2]!='U'||receivedChars[i+2]!='u'))
+          {
+            stepsrequired=step_rev/40.565;
+            steppery.setSpeed(1400);
+            steppery.step(stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='d'&&(receivedChars[i+2]!='D'||receivedChars[i+2]!='U'||receivedChars[i+2]!='u'))
+          {
+            stepsrequired=step_rev/40.565;
+            steppery.setSpeed(1400);
+            steppery.step(-stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='F'&&(receivedChars[i+2]!='f'||receivedChars[i+2]!='B'||receivedChars[i+2]!='b'))
+          {
+            stepsrequired=step_rev/40.565;
+            steppero.setSpeed(1400);
+            steppero.step(stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='f'&&(receivedChars[i+2]!='F'||receivedChars[i+2]!='B'||receivedChars[i+2]!='b'))
+          {
+            stepsrequired=step_rev/40.565;
+            steppero.setSpeed(1400);
+            steppero.step(-stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='B'&&(receivedChars[i+2]!='b'||receivedChars[i+2]!='F'||receivedChars[i+2]!='f'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperr.setSpeed(1400);
+            stepperr.step(stepsrequired);
+            delay(200);
+          }
+          else if(receivedChars[i]=='b'&&(receivedChars[i+2]!='B'||receivedChars[i+2]!='F'||receivedChars[i+2]!='f'))
+          {
+            stepsrequired=step_rev/40.565;
+            stepperr.setSpeed(1400);
+            stepperr.step(-stepsrequired);
+            delay(200);
+          }
+        }
+        
+        }
+        
+    }
