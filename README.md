@@ -9,7 +9,7 @@ The Program generates an algorithm consisting of close to 100 rubik's cube moves
 algoritm in an autimatically generated text files. The Code is generating the algorithm using Ortega's Corner Solving Method and Beyer-Hardwick's Edge Solving Method.
 
 Place the algorithm in the Arduino Ide COM port and run the program it will Start Solving the Cube.
-Don't forget to change the stepper motor pins in the arduino code. It depends on your circuit arrangements.
+Don't forget to change the stepper motor pin numbers in the arduino code. It depends on your circuit arrangements.
 
 ### Main Robot Components -
 
