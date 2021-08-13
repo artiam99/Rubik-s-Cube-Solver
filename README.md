@@ -6,7 +6,7 @@
 
 This is Rubik's Cube Solver. The CPP Program can solve the Cube from any of it's 43 quintillion different combinations.
 The Program generates an algorithm consisting of close to 100 rubik's cube moves (R R' L L' U U' D D' F F' B B') and it stores the
-algoritm in an autimatically generated text files. The Code is generating the algorithm using Ortega's Corner Solving Method and Beyer-Hardwick's Edge Solving Method.
+algoritm in an automatically generated text files. The Code is generating the algorithm using Ortega's Corner Solving Method and Beyer-Hardwick's Edge Solving Method.
 
 Place the algorithm in the Arduino Ide COM port and run the program it will Start Solving the Cube.
 Don't forget to change the stepper motor pin numbers in the arduino code. It depends on your circuit arrangements.
